@@ -63,21 +63,35 @@ std::string Shape::getType();
 
 void Shape::setType(const std::string & type) 
 {
-	std::cout << "     \n";
-	std::cout << "     \n";
-	std::cout << "     \n";
-	
-		//triangle
-		
-	std::cout << " ,  \n";
-	std::cout << " / \\ \n";
-	std::cout << "/___\\\n";
-	
-		//square
-		
-	std::cout << ".---.\n";
-	std::cout << "|   |\n";
-	std::cout << "'---'\n";
+	type_ = type;
+	if (type == "empty")
+	{
+		type_art_ = "     \n"
+			"     \n"
+			"     \n";
+	}
+
+	else if (type == "triangle")
+	{
+		type_art_ = "  , \n"
+			" / \\\n"
+			"/___\\\n";
+
+	}
+
+	else if (type == "square")
+	{
+		type_art_ = ".---.\n"
+			"|   |\n"
+			"'---'\n";
+	}
+
+	else
+	{
+		cout << "ERROR: `Shape::setType`: invalid type\n" << endl;
+		exit(1);
+	}
+}
 		   
 }
 /**
@@ -105,14 +119,8 @@ void Shape::drawToBuffer(Buffer & b, unsigned int x, unsigned int y) const
 *   ```
 *   is for.
 */
-
-
-bool Shape::isHappy(const Neighborhood & n,
-	unsigned int pos_x,
-	unsigned int pos_y) const {
-	double RATIO_ALIKE_HAPPY;
-	double RATIO_DIFFERENT_HAPPY;
-
+bool Shape::isHappy(const Neighborhood & n, unsigned int pos_x, unsigned int pos_y) const
+{
 	if (n.get(pos_x, pos_y).getType() == "empty")
 		return true;
 
@@ -125,8 +133,9 @@ bool Shape::isHappy(const Neighborhood & n,
 	double alike = 0;
 	double different = 0;
 
-	for (int x = x_min; x <= x_max; x++) {
-		for (int y = y_min; y <= y_max; y++) {
+	
+	for (unsigned int x = x_min; x <= x_max; x++) {
+		for (unsigned int y = y_min; y <= y_max; y++) {
 			if (x == pos_x && y == pos_y)
 				continue;
 			else if (n.get(x, y).getType() == "empty")
@@ -142,6 +151,8 @@ bool Shape::isHappy(const Neighborhood & n,
 		&& (different == 0 || alike / different >= RATIO_ALIKE_HAPPY)
 		&& (alike == 0 || different / alike >= RATIO_DIFFERENT_HAPPY);
 }
+
+
 /**
 * Return `true` if the shape is happy (i.e. not willing to move), and
 * `false` otherwise.
