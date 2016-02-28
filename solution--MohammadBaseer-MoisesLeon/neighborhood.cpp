@@ -68,26 +68,25 @@ using std::cin;
 using std::endl;
 using std::string;
 
+Neighborhood::Neighborhood(unsigned int size_x, unsigned int size_y) : size_x(size_x), size_y(size_y)
+{
+	neighborhood_ = new Shape[size_x * size_y]();
+	int rand_shape = 0;
 
-	Neighborhood::Neighborhood(unsigned int size_x, unsigned int size_y)
-		: size_x(size_x), size_y(size_y) {
 
-		// initialize `neighborhood_` and fill with "empty" `Shape`s
-		neighborhood_ = new Shape[size_x * size_y]();
-		int rand_shape = 0;
-		// fill with non-empty shapes so that the ratio of non-empty to empty
-		// shapes is `RATIO_FILLED` (from `constants.h`)
-		for (int filled = 0; filled < size_x*size_y*RATIO_FILLED; ) {
-			unsigned int x = mtrand(0, size_x - 1);
-			unsigned int y = mtrand(0, size_y - 1);
-
-			if (this->get(x, y).getType() == "empty") {
-				this->set(x, y, mtrand(0, 1) ? Shape("triangle")
-					: Shape("square"));
-				filled++;
-			}
+	for (int i = 0; i < size_x*size_y*RATIO_FILLED; i++)
+	{
+		int insert = 0;
+		while (neighborhood_[insert].getType() != "empty")
+		{
+			insert = mtrand(0, size_x*size_y - 1);
 		}
+		rand_shape = mtrand(1, 2);
+		if (rand_shape == 1) neighborhood_[insert].setType("triangle");
+		else neighborhood_[insert].setType("square");
+
 	}
+}
 /**
 * The constructor.
 *
@@ -200,7 +199,7 @@ void Neighborhood::animate(unsigned int frames)
 			}
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 /**
 * 1. Create a buffer.
