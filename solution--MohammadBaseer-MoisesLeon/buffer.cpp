@@ -160,7 +160,14 @@ void  Buffer::draw() const
 
 void  Buffer::clear()
 {
+	for (int y = 0; y < size_y; y++)
+	{
+	for (int x = 0; x < size_x; x++)
+	{
+	data_[y * size_x + x]= ' ';
+	}
 
+	}
 	
 
 }
